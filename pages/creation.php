@@ -1,68 +1,61 @@
 <?php
 session_start();
 require './_init.php';
-$email = $Qualifications = $State = $gender = $age = $url = $tellUsAboutYouSelf = "";
 
-$semail = $_SESSION['session_email'];
-echo $semail;
-// $Qualifications = $_POST['qualifications'];
-// $State = $_POST['State'];
-// $gender = $_POST['gender'];
 if (isset($_POST['create'])) {
-    echo "hello world";
-    global $email;
-    global $Qualifications;
-    global $State;
-    global $gender;
-    global $age;
-    global $gender;
-    global $url;
-    global $tellUsAboutYouSelf;
+    $semail = $_SESSION['session_email'];
+    $Qualifications = mysqli_real_escape_string($conn, $_POST['qualifications']);
+    $State = mysqli_real_escape_string($conn, $_POST['State']);
+    $Domain = mysqli_real_escape_string($conn, $_POST['domain']);
+    $gender = mysqli_real_escape_string($conn, $_POST['gender']);
+    $url = mysqli_real_escape_string($conn, $_POST['url']);
+    $tellUsAboutYouSelf = mysqli_real_escape_string($conn, $_POST['tellUsAboutYouSelf']);
 
+    // Check if a profile photo was uploaded
+    if (isset($_FILES['profilePhoto'])) {
+        $file_tempname = $_FILES['profilePhoto']['tmp_name'];
+        $file_extension = pathinfo($_FILES['profilePhoto']['name'], PATHINFO_EXTENSION);
+        $trimmedEmail = strstr($semail, '@', true);
+        $finalFileName = $trimmedEmail . "_.jpg";
+        $profilePhotoPath = "../userData/cvResume/";
+        // Move the uploaded profile photo to the destination directory
+        if (move_uploaded_file($file_tempname, ' $profilePhotoPath ' . $finalFileName)) {
+            $semail = '';
 
+            $semail = $_SESSION['session_email'];
 
-
-
-
-    if (isset($_POST['qualifications'], $_POST['State'], $_POST['domain'], $_POST['age'], $_POST['gender'], $_POST['url'], $_POST['tellUsAboutYouSelf'])) {
-        $Qualifications = mysqli_real_escape_string($conn, $_POST['qualifications']);
-        $State = mysqli_real_escape_string($conn, $_POST['State']);
-        $Domain = mysqli_real_escape_string($conn, $_POST['domain']);
-        $age = mysqli_real_escape_string($conn, $_POST['age']);
-        $gender = mysqli_real_escape_string($conn, $_POST['gender']);
-        $url = mysqli_real_escape_string($conn, $_POST['url']);
-        $tellUsAboutYouSelf = mysqli_real_escape_string($conn, $_POST['tellUsAboutYouSelf']);
-
-        if (isImage($_FILES['profilePhoto'])) {
-            $file_name = $_FILES['profilePhoto']['name'];
-            $file_type = $_FILES['profilePhoto']['type'];
-            $file_tempname = $_FILES['profilePhoto']['tmp_name'];
-            $file_size = $_FILES['profilePhoto']['size'];
-            $trimmedEmail = strstr($email, '@', true);
-            $finalFileName = "" . $trimmedEmail . "_.jpg";
-            move_uploaded_file($file_tempname, "../userData/profilePhoto/" . $finalFileName);
-
-            $sql = "INSERT INTO `user` (`qualifications`, `state`, `domain`, `gender`, `website`, `description`, `email`) VALUES ('$Qualifications', '$State', '$Domain', '$gender', '$url', '$tellUsAboutYouSelf', '$email')";
+            echo $semail;
+            // Insert data into the database
+            $sql = "UPDATE `user` SET 
+        `qualifications` = '$Qualifications', 
+        `state` = '$State', 
+        `domain` = '$Domain', 
+        `gender` = '$gender', 
+        `website` = '$url', 
+        `description` = '$tellUsAboutYouSelf' 
+        WHERE `email` = '$semail'";
             $result = mysqli_query($conn, $sql);
-
-            // Check if the query was successful
             if ($result) {
+                echo "echo hello by harsh";
+            }
+
+            if ($result) {
+                // Data insertion successful, redirect to landing page
                 header("Location: ./landing.php");
-                // exit();
+                exit();
             } else {
-                // Handle insertion failure
-                echo "Error: " . mysqli_error($conn);
-                // exit();
+                // Handle database insertion failure
+                // echo "Error: " . mysqli_error($conn);
             }
         } else {
-            echo "Error: " . mysqli_error($conn);
-            // exit();
+            // Handle profile photo upload failure
+            // echo "Error uploading profile photo.";
         }
+    } else {
+        // Handle profile photo not uploaded error
+        // echo "Profile photo not uploaded.";
     }
-} else {
-    echo "Error: " . mysqli_error($conn);
 }
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -201,14 +194,11 @@ if (isset($_POST['create'])) {
                                 <input type="text" class="form-control" placeholder="State" name="State" required>
                             </div><br><br>
                             <!-- <div class="col-12 mb-3">
-                                <h6>Please Upload your CV / Resume here</h6>
-                                <input type="file" accept="application/pdf" class="form-control" placeholder="Upload your resume here" name="resume" required>    
-                            </div> -->
+                                    <h6>Please Upload your CV / Resume here</h6>
+                                    <input type="file" accept="application/pdf" class="form-control" placeholder="Upload your resume here" name="resume" required>    
+                                </div> -->
                             <div class="col-12 mb-3">
                                 <input type="text" class="form-control" placeholder="Enter Your Domain | eg: Networking" name="domain" required>
-                            </div>
-                            <div class="col-12 mb-3">
-                                <input type="text" class="form-control" placeholder="Enter Your Age" name="age" required>
                             </div>
                             <div class="col-12 mb-3">
                                 <select name="gender" id="select" class="custom-select" required>

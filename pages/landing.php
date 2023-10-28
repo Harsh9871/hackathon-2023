@@ -10,6 +10,8 @@ if (isset($_POST['apply_job'])) {
 
     // Insert data into the 'applied' table
     $sql = "INSERT INTO `applied` (`jid`, `email`) VALUES ('$jobId', '$email')";
+    $jmail = $jobId . $email;
+    $sql = "INSERT INTO 'applied' ('jid', 'email') VALUES ('$jmail')";
     $result = mysqli_query($conn, $sql);
 
     if ($result) {

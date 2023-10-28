@@ -8,7 +8,7 @@
         $jobdescription = $_POST['jdescription'];
         $sql = "INSERT INTO `jobs` ( `jtitle`, `description`) VALUES ('$jobtitle', '$jobdescription')";
         $result = mysqli_query($conn , $sql);
-        header("Location: ./dash_index.php");
+        header("Location: ./dash_index.html");
         exit();
 
     }

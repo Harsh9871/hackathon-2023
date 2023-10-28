@@ -74,15 +74,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         if ($result) {
             $_SESSION['session_email'] = $eMail;
             header("Location: ./creation.php");
-            exit();
+            // exit();
         } else {
             header("Location: ./register.php");
-            exit();
+            // exit();
         }
     } else {
         header("Location: ./register.php");
-        exit();
+        // exit();
     }
+    
 }
 ?>
 <!doctype html>

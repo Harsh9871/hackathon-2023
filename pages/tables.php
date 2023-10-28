@@ -171,7 +171,7 @@
             require './_init.php';
 
             // Fetch data from the admin table
-            $selectAdminQuery = "SELECT `username`, `email`, `qualifications`, `state`, `resume`, `domain`, `srno`, `age`, `gender`, `website`, `description` FROM `admin`";
+            $selectAdminQuery = "SELECT `username`, `email`, `qualifications`, `state`,  `domain`, `id`, `gender`, `website`, `description` FROM `admin`";
             $adminResult = mysqli_query($conn, $selectAdminQuery);
 
             // Check if there are any results
@@ -202,9 +202,7 @@
             <td>' . $row["email"] . '</td>
             <td>' . $row["qualifications"] . '</td>
             <td>' . $row["state"] . '</td>
-            <td>' . $row["resume"] . '</td>
             <td>' . $row["domain"] . '</td>
-            <td>' . $row["age"] . '</td>
             <td>' . $row["gender"] . '</td>
             <td>' . $row["website"] . '</td>
             <td>' . $row["description"] . '</td>
@@ -220,7 +218,7 @@
             }
 
             // Close the database connection
-            mysqli_close($conn);
+            // mysqli_close($conn);
             ?>
 
           </div>

@@ -1,13 +1,13 @@
-  <?php
+<?php
   require './_init.php';
   $email = '';
   if (isset($_GET['accept'])) {
     echo "Hello World";
-    $srno = $_GET['accept'];
+    $id = $_GET['accept'];
 
     $accept = true;
-    $selectUserQuery = "SELECT `username`, `email`,`qualifications`,`state`,`resume`,`domain`,`srno`,`age`,`gender`,`website`,`description` FROM `user` WHERE `srno` = $srno";
-    $userResult = mysqli_query($conn, $selectUserQuery);
+    $sql = "SELECT `username`, `email`,`qualifications`,`state`,`domain`,`id`,`gender`,`website`,`description` FROM `user` WHERE `id` = '$id'";
+    $userResult = mysqli_query($conn, $sql);
     $userData = mysqli_fetch_assoc($userResult);
     if ($userData) {
       $username = $userData['username'];
@@ -16,17 +16,16 @@
       $state = $userData['state'];
       $resume = $userData['resume'];
       $domain = $userData['domain'];
-      $age = $userData['age'];
       $gender = $userData['gender'];
       $website = $userData['website'];
       $description = $userData['description'];
 
       // Insert data into the 'admin' table
-      $insertAdminQuery = "INSERT INTO `admin` (`username`, `email`, `qualifications`, `state`, `resume`, `domain`, `srno`, `age`, `gender`, `website`, `description`) VALUES ('$username', '$email', '$qualifications', '$state', '$resume', '$domain', $srno, '$age', '$gender', '$website', '$description')";
+      $insertAdminQuery = "INSERT INTO `admin` (`username`, `email`, `qualifications`, `state`, `domain`, `id`, `gender`, `website`, `description`) VALUES ('$username', '$email', '$qualifications', '$state', '$domain', '$id',  '$gender', '$website', '$description')";
       $insertResult = mysqli_query($conn, $insertAdminQuery);
       if ($insertResult) {
         // Data inserted into admin table successfully, delete the record from the user table
-        $deleteUserQuery = "DELETE FROM `user` WHERE `srno` = $srno";
+        $deleteUserQuery = "DELETE FROM `user` WHERE `id` = $id";
         $deleteResult = mysqli_query($conn, $deleteUserQuery);
 
         if ($deleteResult) {
@@ -51,9 +50,9 @@
 
   if (isset($_GET['delete'])) {
     echo "Hello";
-    $srno = $_GET['delete'];
+    $id = $_GET['delete'];
     $delete = true;
-    $sql = "DELETE FROM `user` WHERE `srno` = $srno";
+    $sql = "DELETE FROM `user` WHERE `id` = $id";
     $result = mysqli_query($conn, $sql);
   }
   ?>
@@ -241,12 +240,12 @@
                       <tbody>
                         <?php
                         // Fetch data from database and display rows
-                        $sql = 'SELECT `srno`, `email`, `username`, `description` FROM `user` WHERE srno > 209';
+                        $sql = 'SELECT `id`, `email`, `username`, `description` FROM `user` WHERE id > 1  ';
                         $result = mysqli_query($conn, $sql);
 
-                        while ($row = $result->fetch_assoc()) {
+                        while ($row = mysqli_fetch_assoc($result)) {
                           global $email;
-                          $srno = $row['srno'];
+                          $id = $row['id'];
                           $username = $row['username'];
                           $email = $row['email'];
                           $description = $row['description'];
@@ -259,15 +258,15 @@
                                     <span class="custom-control-indicator"></span>
                                   </label>
                                 </th>
-                                <td>' . $srno . '</td>
+                                <td>' . $id . '</td>
                                 <td>' . $email . '</td>
                                 <td>' . $username . '</td>
                                 <td>' . $description . '</td>
                                 <td>
                                     <td>
                                         <a href="../profile/profile.html" class="btn btn-sm btn-primary">View Profile</a>
-                                        <a href="?accept=' . $srno . '" class="btn btn-sm btn-success">Accept</a>
-                                        <a href="?delete=' . $srno . '" class="btn btn-sm btn-danger">Delete</a>
+                                        <a href="?accept=' . $id . '" class="btn btn-sm btn-success">Accept</a>
+                                        <a href="?delete=' . $id . '" class="btn btn-sm btn-danger">Delete</a>
                                     </td>
                                 </tr>';
                         }
