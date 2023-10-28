@@ -1,0 +1,619 @@
+INSERT INTO `user` (`username`, `email`, `password`, `qualifications`, `state`, `resume`, `domain`, `srno`, `age`, `gender`, `website`, `description`) VALUES ('adjcasfkKD', 'harsh@gmail.com', 'dskdhvhshsakfhk@Ekqewbfskjdcn@eq4bKQWJE3nlsdnckfbkhbvkfdbk', 'dbvsabkh', 'kdbsjhjhbv', '', 'djvsdkvb', '1', '12', 'male', 'www.google.com ', 'PasswordMatchAndHashPasswordMatchAndHash');
+
+
+
+//modal
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Launch static backdrop modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+//cwh crud
+
+<?php  
+// INSERT INTO `notes` (`sno`, `title`, `description`, `tstamp`) VALUES (NULL, 'But Books', 'Please buy books from Store', current_timestamp());
+$insert = false;
+$update = false;
+$delete = false;
+// Connect to the Database 
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "notes";
+
+// Create a connection
+$conn = mysqli_connect($servername, $username, $password, $database);
+
+// Die if connection was not successful
+if (!$conn){
+    die("Sorry we failed to connect: ". mysqli_connect_error());
+}
+
+if(isset($_GET['delete'])){
+  $sno = $_GET['delete'];
+  $delete = true;
+  $sql = "DELETE FROM `notes` WHERE `sno` = $sno";
+  $result = mysqli_query($conn, $sql);
+}
+if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+if (isset( $_POST['snoEdit'])){
+  // Update the record
+    $sno = $_POST["snoEdit"];
+    $title = $_POST["titleEdit"];
+    $description = $_POST["descriptionEdit"];
+
+  // Sql query to be executed
+  $sql = "UPDATE `notes` SET `title` = '$title' , `description` = '$description' WHERE `notes`.`sno` = $sno";
+  $result = mysqli_query($conn, $sql);
+  if($result){
+    $update = true;
+}
+else{
+    echo "We could not update the record successfully";
+}
+}
+else{
+    $title = $_POST["title"];
+    $description = $_POST["description"];
+
+  // Sql query to be executed
+  $sql = "INSERT INTO `notes` (`title`, `description`) VALUES ('$title', '$description')";
+  $result = mysqli_query($conn, $sql);
+
+   
+  if($result){ 
+      $insert = true;
+  }
+  else{
+      echo "The record was not inserted successfully because of this error ---> ". mysqli_error($conn);
+  } 
+}
+}
+?>
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="//cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+
+
+  <title>iNotes - Notes taking made easy</title>
+
+</head>
+
+<body>
+ 
+
+  <!-- Edit Modal -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit this Note</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <form action="/crud/index.php" method="POST">
+          <div class="modal-body">
+            <input type="hidden" name="snoEdit" id="snoEdit">
+            <div class="form-group">
+              <label for="title">Note Title</label>
+              <input type="text" class="form-control" id="titleEdit" name="titleEdit" aria-describedby="emailHelp">
+            </div>
+
+            <div class="form-group">
+              <label for="desc">Note Description</label>
+              <textarea class="form-control" id="descriptionEdit" name="descriptionEdit" rows="3"></textarea>
+            </div> 
+          </div>
+          <div class="modal-footer d-block mr-auto">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#"><img src="/crud/logo.svg" height="28px" alt=""></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Contact Us</a>
+        </li>
+
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+
+  <?php
+  if($insert){
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Success!</strong> Your note has been inserted successfully
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+  }
+  ?>
+  <?php
+  if($delete){
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Success!</strong> Your note has been deleted successfully
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+  }
+  ?>
+  <?php
+  if($update){
+    echo "<div class='alert alert-success alert-dismissible fade show' role='alert'>
+    <strong>Success!</strong> Your note has been updated successfully
+    <button type='button' class='close' data-dismiss='alert' aria-label='Close'>
+      <span aria-hidden='true'>×</span>
+    </button>
+  </div>";
+  }
+  ?>
+  <div class="container my-4">
+    <h2>Add a Note to iNotes</h2>
+    <form action="/crud/index.php" method="POST">
+      <div class="form-group">
+        <label for="title">Note Title</label>
+        <input type="text" class="form-control" id="title" name="title" aria-describedby="emailHelp">
+      </div>
+
+      <div class="form-group">
+        <label for="desc">Note Description</label>
+        <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary">Add Note</button>
+    </form>
+  </div>
+
+  <div class="container my-4">
+
+
+    <table class="table" id="myTable">
+      <thead>
+        <tr>
+          <th scope="col">S.No</th>
+          <th scope="col">Title</th>
+          <th scope="col">Description</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php 
+          $sql = "SELECT * FROM `notes`";
+          $result = mysqli_query($conn, $sql);
+          $sno = 0;
+          while($row = mysqli_fetch_assoc($result)){
+            $sno = $sno + 1;
+            echo "<tr>
+            <th scope='row'>". $sno . "</th>
+            <td>". $row['title'] . "</td>
+            <td>". $row['description'] . "</td>
+            <td> <button class='edit btn btn-sm btn-primary' id=".$row['sno'].">Edit</button> <button class='delete btn btn-sm btn-primary' id=d".$row['sno'].">Delete</button>  </td>
+          </tr>";
+        } 
+          ?>
+
+
+      </tbody>
+    </table>
+  </div>
+  <hr>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#myTable').DataTable();
+
+    });
+  </script>
+  <script>
+    edits = document.getElementsByClassName('edit');
+    Array.from(edits).forEach((element) => {
+      element.addEventListener("click", (e) => {
+        console.log("edit ");
+        tr = e.target.parentNode.parentNode;
+        title = tr.getElementsByTagName("td")[0].innerText;
+        description = tr.getElementsByTagName("td")[1].innerText;
+        console.log(title, description);
+        titleEdit.value = title;
+        descriptionEdit.value = description;
+        snoEdit.value = e.target.id;
+        console.log(e.target.id)
+        $('#editModal').modal('toggle');
+      })
+    })
+
+    deletes = document.getElementsByClassName('delete');
+    Array.from(deletes).forEach((element) => {
+      element.addEventListener("click", (e) => {
+        console.log("edit ");
+        sno = e.target.id.substr(1);
+
+        if (confirm("Are you sure you want to delete this note!")) {
+          console.log("yes");
+          window.location = `/crud/index.php?delete=${sno}`;
+          // TODO: Create a form and use post request to submit a form
+        }
+        else {
+          console.log("no");
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
+
+
+
+
+
+
+<?php
+require './_init.php';
+if (isset($_GET['accept'])) {
+  $sno = $_GET['accept'];
+  $accept = true;
+  $sql = "INSERT INTO `admin` (`username`, `email`, `password`) VALUES ('$FullName', '$eMail','$hashedPassword' )";
+  $result = mysqli_query($conn, $sql);
+}
+if (isset($_GET['delete'])) {
+  echo "Hello";
+  $srno = $_GET['delete'];
+  $delete = true;
+  $sql = "DELETE FROM `user` WHERE `srno` = $srno";
+  $result = mysqli_query($conn, $sql);
+}
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>AdminX - Data Tables</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" type="text/css" href="../assets/css/adminx.css" media="screen" />
+</head>
+
+<body>
+  <div class="adminx-container">
+    <!-- Header -->
+    <nav class="navbar navbar-expand justify-content-between fixed-top">
+      <a class="navbar-brand mb-0 h1 d-none d-md-block" href="dash_index.html">
+        <img src="../assets/images/logo.png" class="navbar-brand-image d-inline-block align-top mr-2" alt="">
+        AdminX
+      </a>
+
+      <form class="form-inline form-quicksearch d-none d-md-block mx-auto">
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <div class="input-group-icon">
+              <i data-feather="search"></i>
+            </div>
+          </div>
+          <input type="text" class="form-control" id="search" placeholder="Type to search...">
+        </div>
+      </form>
+
+      <div class="d-flex flex-1 d-block d-md-none">
+        <a href="#" class="sidebar-toggle ml-3">
+          <i data-feather="menu"></i>
+        </a>
+      </div>
+
+      <ul class="navbar-nav d-flex justify-content-end mr-2">
+        <!-- Notificatoins -->
+        <li class="nav-item dropdown d-flex align-items-center mr-2">
+          <a class="nav-link nav-link-notifications" id="dropdownNotifications" data-toggle="dropdown" href="#">
+            <i class="oi oi-bell display-inline-block align-middle"></i>
+            <span class="nav-link-notification-number">3</span>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right dropdown-menu-notifications"
+            aria-labelledby="dropdownNotifications">
+            <div class="notifications-header d-flex justify-content-between align-items-center">
+              <span class="notifications-header-title">
+                Notifications
+              </span>
+              <a href="#" class="d-flex"><small>Mark all as read</small></a>
+            </div>
+
+            <div class="list-group">
+
+
+              <a href="#" class="list-group-item list-group-item-action">
+                <p class="mb-1"><br />1,000 new members today</p>
+                <small>3 days ago</small>
+              </a>
+
+              <a href="#" class="list-group-item list-group-item-action">
+                <p class="mb-1 text-danger"><strong>System error detected</strong></p>
+                <small>3 days ago</small>
+              </a>
+
+              <a href="#" class="list-group-item list-group-item-action">
+                <p class="mb-1">Your task <strong>Profile Revi</strong> is due today.</p>
+                <small>4 days ago</small>
+              </a>
+            </div>
+
+            <div class="notifications-footer text-center">
+              <a href="#"><small>View all notifications</small></a>
+            </div>
+          </div>
+        </li>
+        <!-- Notifications -->
+        <li class="nav-item dropdown">
+          <a class="nav-link avatar-with-name" id="navbarDropdownMenuLink" data-toggle="dropdown" href="#">
+            <img
+              src="https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg"
+              class="d-inline-block align-top" alt="">
+          </a>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">My Tasks</a>
+            <a class="dropdown-item" href="#">Settings</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item text-danger" href="logout.php">Sign out</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- expand-hover push -->
+    <!-- Sidebar -->
+    <div class="adminx-sidebar expand-hover push">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-item">
+          <a href="dash_index.html" class="sidebar-nav-link">
+            <span class="sidebar-nav-icon">
+              <i data-feather="home"></i>
+            </span>
+            <span class="sidebar-nav-name">
+              Dashboard
+            </span>
+            <span class="sidebar-nav-end">
+
+            </span>
+          </a>
+        </li>
+
+        <li class="sidebar-nav-item">
+          <a href="tables.html" class="sidebar-nav-link active">
+            <span class="sidebar-nav-abbr">
+              P
+            </span>
+            <span class="sidebar-nav-name">
+              Pending Profiles
+            </span>
+          </a>
+        </li>
+
+        <li class="sidebar-nav-item">
+          <a href="tables_data.php" class="sidebar-nav-link">
+            <span class="sidebar-nav-abbr">
+              A
+            </span>
+            <span class="sidebar-nav-name">
+              Accepted Profiles
+            </span>
+          </a>
+        </li>
+
+        <li class="sidebar-nav-item">
+          <a href="tables_data.php" class="sidebar-nav-link">
+            <span class="sidebar-nav-abbr">
+              C
+            </span>
+            <span class="sidebar-nav-name">
+              Create An Admin
+            </span>
+          </a>
+        </li>
+
+        <li class="sidebar-nav-item">
+          <a href="tables_data.php" class="sidebar-nav-link">
+            <span class="sidebar-nav-abbr">
+              C
+            </span>
+            <span class="sidebar-nav-name">
+              Create A Job
+            </span>
+          </a>
+        </li>
+
+        
+      </ul>
+      </li>
+      </ul>
+    </div><!-- Sidebar End -->
+
+    <!-- Main Content -->
+    <div class="adminx-content">
+      <div class="adminx-main-content">
+        <div class="container-fluid">
+          <!-- BreadCrumb -->
+          <div class="pb-3">
+            <h1>Data Tables</h1>
+          </div>
+
+          <div class="row">
+            <div class="col">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <div class="card mb-grid">
+                <div class="table-responsive-md">
+
+
+                  <?php
+
+                  ?>
+
+                  <table class="table table-actions table-striped table-hover mb-0" data-table>
+                    <thead>
+                      <tr>
+                        <th scope="col">
+                          <label class="custom-control custom-checkbox m-0 p-0">
+                            <input type="checkbox" class="custom-control-input table-select-all">
+                            <span class="custom-control-indicator"></span>
+                          </label>
+                        </th>
+                        <th scope="col">sr no</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">username</th>
+                        <th scope="col">description</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php
+                      $j = 1;
+                      for ($i=0; $i < 1; $i++) {
+                        $sql = 'SELECT `srno`, `email`, `username`, `description` FROM `user` WHERE srno > 209';
+                        $result = mysqli_query($conn, $sql);
+                        $len = mysqli_num_rows($result);
+                        while ($row = $result->fetch_assoc()) {
+                          $srno = $row['srno'];
+                          $username = $row['username'];
+                          $email = $row['email'];
+                          $description = $row['description'];
+                         
+                          echo '
+      <tr>
+        <th scope="row">
+          <label class="custom-control custom-checkbox m-0 p-0">
+            <input type="checkbox" class="custom-control-input table-select-row">
+            <span class="custom-control-indicator"></span>
+          </label>
+        </th>
+        <td>' . $srno . '</td>
+        <td>' . $email . '</td>
+        <td>' . $username . '</td>
+        <td>' . $description . '</td>
+        <td>
+        <button class="btn btn-sm btn-primary" name="accept">Edit</button>
+        <button class="btn btn-sm btn-danger" name="delete" value="<?php echo $srno; ?>">Delete</button>
+
+        </td>
+      </tr>';
+                        }
+                      }
+                      ?>
+                    </tbody>
+                  </table>
+
+
+                  <?php
+                  // require './_init.php';
+
+
+
+                  ?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- // Main Content -->
+  </div>
+
+  <!-- If you prefer jQuery these are the required scripts -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+  <script src="../assets/js/vendor.js"></script>
+  <script src="../assets/js/adminx.js"></script>
+
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      var table = $('[data-table]').DataTable({
+        "columns": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          {
+            "orderable": false
+          }
+        ]
+      });
+
+      /* $('.form-control-search').keyup(function(){
+        table.search($(this).val()).draw() ;
+      }); */
+    });
+  </script>
+  <!-- If you prefer vanilla JS these are the only required scripts -->
+  <!-- script src="../dist/js/vendor.js"></script>
+    <script src="../dist/js/adminx.vanilla.js"></script-->
+</body>
+
+</html>

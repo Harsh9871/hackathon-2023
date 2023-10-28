@@ -1,0 +1,40 @@
+users
+Id ai pk
+name
+email
+address
+
+
+jobs
+Id ai pk
+title
+description
+
+
+
+users_job
+Id
+userId
+jobId FK
+
+
+quiz
+Id
+title
+description
+
+questions
+Id
+Title
+option1
+option2
+option3
+option4
+answer
+
+result
+Id
+quiz_id
+user_id
+marks
+status
