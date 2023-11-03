@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
-            $_SESSION['session_email'] = $eMail;
+             $_SESSION['session_email']= $eMail;
             header("Location: ./creation.php");
             // exit();
         } else {
@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <div class="row align-items-center">
 
           <div class="col-6 col-lg-9">
-            <a href="#" class="small mr-3"><span class="icon-question-circle-o mr-2"></span> <span class="d-none d-lg-inline-block">Have a questions?</span></a>
+            <a href="contact.html" class="small mr-3"><span class="icon-question-circle-o mr-2"></span> <span class="d-none d-lg-inline-block">Have a questions?</span></a>
             <a href="#" class="small mr-3"><span class="icon-phone mr-2"></span> <span class="d-none d-lg-inline-block">9966996699</span></a>
             <a href="#" class="small mr-3"><span class="icon-envelope mr-2"></span> <span class="d-none d-lg-inline-block">info@mydomain.com</span></a>
           </div>
@@ -180,7 +180,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
   </nav>
 
 
-  <div class="untree_co-hero inner-page overlay" style="background-image: url('images/img-school-5-min.jpg');">
+  <div class="untree_co-hero inner-page overlay" style="background-image: url('https://www.simplilearn.com/ice9/free_resources_article_thumb/friend_class_in_cpp.jpg');">
     <div class="container">
       <div class="row align-items-center justify-content-center">
         <div class="col-12">

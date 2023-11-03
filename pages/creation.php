@@ -4,6 +4,8 @@ require './_init.php';
 
 if (isset($_POST['create'])) {
     $semail = $_SESSION['session_email'];
+    echo $semail;
+
     $Qualifications = mysqli_real_escape_string($conn, $_POST['qualifications']);
     $State = mysqli_real_escape_string($conn, $_POST['State']);
     $Domain = mysqli_real_escape_string($conn, $_POST['domain']);
@@ -11,51 +13,61 @@ if (isset($_POST['create'])) {
     $url = mysqli_real_escape_string($conn, $_POST['url']);
     $tellUsAboutYouSelf = mysqli_real_escape_string($conn, $_POST['tellUsAboutYouSelf']);
 
+    if (isset($_POST['resume'])) {
+
+        $folder_path = './userData/cvResume';
+     
+        $filename = basename($_FILES['resume']['name']);
+        $newname = $folder_path .$_SESSION['session_email']. $filename;
+        move_uploaded_file($_FILES['resume']['name'], $newname);
+        
+       }
+     
+     }
+
     // Check if a profile photo was uploaded
     if (isset($_FILES['profilePhoto'])) {
         $file_tempname = $_FILES['profilePhoto']['tmp_name'];
         $file_extension = pathinfo($_FILES['profilePhoto']['name'], PATHINFO_EXTENSION);
         $trimmedEmail = strstr($semail, '@', true);
         $finalFileName = $trimmedEmail . "_.jpg";
-        $profilePhotoPath = "../userData/cvResume/";
+        $profilePhotoPath = "../userData/profilePhoto/";
         // Move the uploaded profile photo to the destination directory
-        if (move_uploaded_file($file_tempname, ' $profilePhotoPath ' . $finalFileName)) {
-            $semail = '';
+        move_uploaded_file($file_tempname,  $profilePhotoPath  . $finalFileName);
+        $semail = '';
 
-            $semail = $_SESSION['session_email'];
+        $semail = $_SESSION['session_email'];
 
-            echo $semail;
-            // Insert data into the database
-            $sql = "UPDATE `user` SET 
-        `qualifications` = '$Qualifications', 
-        `state` = '$State', 
-        `domain` = '$Domain', 
-        `gender` = '$gender', 
-        `website` = '$url', 
-        `description` = '$tellUsAboutYouSelf' 
-        WHERE `email` = '$semail'";
-            $result = mysqli_query($conn, $sql);
-            if ($result) {
-                echo "echo hello by harsh";
-            }
-
-            if ($result) {
-                // Data insertion successful, redirect to landing page
-                header("Location: ./landing.php");
-                exit();
-            } else {
-                // Handle database insertion failure
-                // echo "Error: " . mysqli_error($conn);
-            }
-        } else {
-            // Handle profile photo upload failure
-            // echo "Error uploading profile photo.";
-        }
-    } else {
-        // Handle profile photo not uploaded error
-        // echo "Profile photo not uploaded.";
+        // echo $semail;
+        // Insert data into the database
     }
-}
+    $sql = "UPDATE `user` SET 
+    `qualifications` = '$Qualifications', 
+    `state` = '$State', 
+    `domain` = '$Domain', 
+    `gender` = '$gender', 
+    `website` = '$url', 
+    `description` = '$tellUsAboutYouSelf',
+    `review` = 'unreviewed'
+    WHERE `email` = '$semail'";
+
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            header("Location: landing.php");
+            exit();
+            // echo "echo hello by harsh";
+        }
+
+        if ($result) {
+            // Data insertion successful, redirect to landing page
+            // header("Location: ./landing.php");
+            exit();
+        } else {
+            // Handle database insertion failure
+            // echo "Error: " . mysqli_error($conn);
+        }
+    
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -183,7 +195,7 @@ if (isset($_POST['create'])) {
 
                         </div>
                         <div class="row">
-                            <div class="col-12 mb-3">
+                        <div class="col-12 mb-3">
                                 <h6>Please Upload your Profile here</h6>
                                 <input type="file" accept="image/*" capture="camera" class="form-control" placeholder="Upload your image here" name="profilePhoto" required>
                             </div>
@@ -192,13 +204,14 @@ if (isset($_POST['create'])) {
                             </div>
                             <div class="col-12 mb-3">
                                 <input type="text" class="form-control" placeholder="State" name="State" required>
-                            </div><br><br>
-                            <!-- <div class="col-12 mb-3">
-                                    <h6>Please Upload your CV / Resume here</h6>
-                                    <input type="file" accept="application/pdf" class="form-control" placeholder="Upload your resume here" name="resume" required>    
-                                </div> -->
+                            </div>
+
                             <div class="col-12 mb-3">
                                 <input type="text" class="form-control" placeholder="Enter Your Domain | eg: Networking" name="domain" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="resume">Enter your CV/Resume</label>
+                                <input type="file" accept="application/pdf" class="form-control" placeholder="Enter Your CV/Resume" name="resume" required>
                             </div>
                             <div class="col-12 mb-3">
                                 <select name="gender" id="select" class="custom-select" required>
@@ -210,7 +223,7 @@ if (isset($_POST['create'])) {
 
                             </div>
                             <div class="col-12 mb-3">
-                                <input type="url" class="form-control" placeholder="Enter Your Website URL" name="url" required>
+                                <input type="url" class="form-control" placeholder="Enter Your Linkdin URL" name="url" required>
                             </div>
                             <div class="col-12 mb-3">
                                 <textarea name="tellUsAboutYouSelf" class="form-control" id="message" cols="50" rows="5" name="tellUsAboutYouSelf" placeholder="Tell us about yourself" style="resize: none;" required></textarea>
