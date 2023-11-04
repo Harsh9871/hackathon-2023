@@ -1,36 +1,3 @@
-    <?php
-    session_start();
-    require './_init.php';
-    // apply_job
-    if (isset($_POST['apply_job'])) {
-        $jobId = "";
-        $jobId =   $_POST['jid'];
-        $email = $_SESSION['session_email'];
-
-
-        $jmail = $jobId . $email;
-        $sql = "INSERT INTO `applied` (`jid`, `email` , `joint`) VALUES ('$jobId' , '$email' ,'$jmail' )";
-        $result = mysqli_query($conn, $sql);
-
-        if ($result) {
-            // echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            //     <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-            //     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            // </div>';
-            echo '<script> alert("Data Submitted") </script>';
-            header('Location: ./landing.php');
-        } else {
-            // Error occurred while inserting data
-            // echo "Error: " . mysqli_error($conn);
-        }
-    }
-
-
-
-
-
-
-    ?>
     <!DOCTYPE html>
     <html lang="en">
 
@@ -40,6 +7,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
         <link rel="stylesheet" type="text/css" href="../assets/css/adminx.css" media="screen" />
+        <style>
+            .div1{
+                height: 1000px;
+            }
+            
+        </style>
 
 
     </head>
@@ -191,8 +164,7 @@
                             </span>
                         </a>
                     </li>
-                    
-                    
+
                 </ul>
                 </li>
                 </ul>
@@ -204,56 +176,42 @@
                         <div class="container-fluid">
                             <div class="pb-3">
                                 <h1 align="center">
-                                    <font color="blue">Available jobs</font>
+                                    <font color="blue">Job Description</font>
                                 </h1>
                             </div>
+                            <!--  -->
 
 
-
-
-
-                            <!-- job -->
-                            <?php
-                            // Fetch job data from the database
-                            $sql = "SELECT * FROM `jobs`";
-                            $result = mysqli_query($conn, $sql);
-
-                            // Check if there are any rows in the result set
-                            if (mysqli_num_rows($result) > 0) {
-                                // Loop through the rows and display job information
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    $jobId = $row['jid'];
-                                    $jobTitle = $row['jtitle'];
-                                    $jobDescription = $row['description'];
-                            ?>
-                                    <div class="row">
-                                        <div class="col">
-                                            <div class="card mb-grid w-100">
-                                                <div class="card-body">
-                                                    <div class="d-flex justify-content-between mb-3">
-                                                        <h5 class="card-title mb-0">
-                                                            <font color="blue"><?php echo $jobTitle; ?></font>
-                                                        </h5>
-                                                    </div>
-                                                    <p align="left"><?php echo $jobDescription; ?></p>
-                                                    <div class="mb-0" data-aos="fade-up" data-aos-delay="300" align="right">
-                                                        <form method="post">
-                                                            <input type="hidden" name="jid" value="<?php echo $jobId; ?>">
-                                                            <button type="submit" class="btn btn-primary" name="apply_job">Apply Now</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="card mb-grid w-100">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-center mb-3">
+                                                <h1 class="card-title" align="center">
+                                                    <font color="blue" id="title">Title</font>
+                                                </h1>
+                                            </div>
+                                            <div class="div1">
+                                            <h1>HR</h1>
+                                                <p>
+                                                A Human Resources (HR) Officer is responsible for managing every aspect of the employment process, including orientation and training new staff members. They also assist with payroll management, so employees receive their paychecks on time.
+                                                </p>
+                                               
+                                                <p class="mb-0" data-aos="fade-up" data-aos-delay="300" align="right">
+                                                    <button type="submit" class="btn btn-primary" name="addjob">
+                                                        APPLY
+                                                    </button>
+                                                    
+                                                </p>
                                             </div>
                                         </div>
                                     </div>
-                            <?php
-                                }
-                            } else {
-                                // No jobs found
-                                echo "<p>No jobs available</p>";
-                            }
-                            ?>
-                            <!-- job -->
+                                </div>
+                            </div>
+                            
+
+
+                            <!--  -->
                         </div>
                     </div>
                 </div>
@@ -261,7 +219,21 @@
 
 
             <!-- job -->
+            <script>
+                // Get all elements with class "apply-form"
+                const applyForms = document.querySelectorAll('.apply-form');
 
+                // Add event listener to each form
+                applyForms.forEach(form => {
+                    form.addEventListener('submit', function(event) {
+                        // Prevent the form from submitting and refreshing the page
+                        event.preventDefault();
+
+                        // Show an alert when the form is submitted
+                        alert('You have applied to the job!');
+                    });
+                });
+            </script>
             <!-- If you prefer jQuery these are the required scripts -->
             <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>

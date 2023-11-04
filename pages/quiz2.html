@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Quiz Page </title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+h2 {
+    margin-bottom: 2rem;
+}
+
+.questionBox {
+    margin: 3rem auto;
+}
+
+.border {
+    border: 1px solid rgb(209, 200, 200);
+    border-radius: 4px;
+}
+
+.questions {
+    margin-bottom: 5px;
+    padding-left: 10px;
+}
+
+.rightBox {
+    margin: 2px;
+    display: block;
+    width: 350px;
+    border-radius: 4px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.answers {
+    padding-left: 10px;
+}
+
+.right {
+    background-color: green;
+    color: #fff;
+    animation: correct;
+    animation-duration: 0.2s;
+    animation-iteration-count: 1;
+}
+
+@keyframes correct {
+    0% {
+        transform: scale(1);
+    }
+
+    100% {
+        transform: scale(1.1);
+    }
+}
+
+.wrong {
+    padding: 10px;
+    border-radius: 4px;
+    background-color: red;
+    color: #fff;
+    margin: 2px;
+    display: block;
+    cursor: pointer;
+    animation: wrong;
+    animation-duration: 0.1s;
+    animation-iteration-count: 3;
+}
+
+@keyframes wrong {
+    0% {
+        transform: rotate(0);
+    }
+
+    100% {
+        transform: rotate(6deg);
+    }
+
+}
+
+.box {
+    padding: 10px;
+    cursor: pointer;
+    margin: 2px;
+    display: block;
+    width: 350px;
+}
+
+input[type='radio'] {
+    display: none;
+}
+
+label,
+input {
+    cursor: pointer;
+}
+
+    </style>
+</head>
+
+<body>
+    <!-- Question 1 -->
+    <div class="questionBox">
+        <h3 class="questions">1. What is the full form of HTML? </h3>
+        <div class="answers">
+            <div class="border rightBox" id="right">
+                <input type="radio" name="html" id="firstA">
+                <label for="firstA"> i). Hypertext Markup Language </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="html" id="firstB">
+                <label for="firstB"> ii). Hyperlink Markup Language </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="html" id="firstC">
+                <label for="firstC"> iii). Hypertext Market and Text Markup Language </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="html" id="firstD">
+                <label for="firstD"> iv). None of the Above </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="questionBox">
+        <h3 class="questions"> 2. Which one is the correct sequence of HTML tags: </h3>
+        <div class="answers">
+            <div class="border box">
+                <input type="radio" name="css" id="secondA">
+                <label for="secondA"> i). head, body, title, html </label>
+            </div>
+
+            <div class="border rightBox">
+                <input type="radio" name="css" id="secondB">
+                <label for="secondB"> ii). html, head, title, body </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="secondC">
+                <label for="secondC"> iii). html, title, head, body </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="secondD">
+                <label for="secondD"> iv). None of the above </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="questionBox">
+        <h3 class="questions"> 3. Which tag is used to make the underlined text? </h3>
+        <div class="answers">
+            <div class="border box">
+                <input type="radio" name="css" id="thirdA">
+                <label for="thirdA"> i). &lt;b&gt; </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="thirdB">
+                <label for="thirdB"> ii). &lt;ul&gt; </label>
+            </div>
+
+            <div class="border rightBox">
+                <input type="radio" name="css" id="thirdC">
+                <label for="thirdC"> iii). &lt;u&gt; </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="thirdD">
+                <label for="thirdD"> iv). &lt;line&gt; </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="questionBox">
+        <h3 class="questions"> 4. How to create a checkbox in HTML? </h3>
+        <div class="answers">
+            <div class="border rightBox">
+                <input type="radio" name="css" id="fourthA">
+                <label for="fourthA"> i). &lt;input type = "checkbox"&gt; </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="fourthB">
+                <label for="fourthB"> ii). &lt;input type = "button"&gt; </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="fourthC">
+                <label for="fourthC"> iii). &lt;checkbox&gt; </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="fourthD">
+                <label for="fourthD"> iv). &lt;input type = "check"&gt; </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="questionBox">
+        <h3 class="questions"> 5. Which HTML tag is used to make the text bold in HTML? </h3>
+        <div class="answers">
+            <div class="border box">
+                <input type="radio" name="css" id="fifthA">
+                <label for="fifthA"> i). &lt;pre&gt; </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="fifthB">
+                <label for="fifthB"> ii). &lt;br&gt; </label>
+            </div>
+
+            <div class="border rightBox">
+                <input type="radio" name="css" id="fifthC">
+                <label for="fifthC"> iii). &lt;b&gt; </label>
+            </div>
+
+            <div class="border box">
+                <input type="radio" name="css" id="fifthD">
+                <label for="fifthD"> iv). None </label>
+            </div>
+        </div>
+   </div>
+   <script>
+    const wrongAns = document.querySelectorAll('.box');
+const rightAns = document.querySelectorAll('.rightBox');
+wrongAns.forEach(item => {
+    item.addEventListener('click', () => item.classList.add("wrong"));
+});
+rightAns.forEach(item => {
+    item.addEventListener('click', () => item.classList.add("right"));
+});
+   </script>
+</body>
+<!-- JavaScript -->
+<script src="script.js"></script>
+
+</html>

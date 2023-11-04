@@ -3,6 +3,13 @@ session_start();
 require './_init.php';
 if (isset($_GET['accept'])) {
   // echo "Hello World";
+  if (isset($_GET['email'])) {
+    $email = $_GET['email'];
+    // Use $email in your code to fetch user profile data based on the email parameter
+} else {
+    // Handle the case when email parameter is not provided in the URL
+    // Redirect or display an error message
+}
   $id = $_GET['accept'];
   
   // $accept = true;
@@ -12,6 +19,7 @@ if (isset($_GET['accept'])) {
   if ($userData) {
     $username = $userData['username'];
     $email = $userData['email'];
+    $email = $_GET['email'];
     $qualifications = $userData['qualifications'];
     $state = $userData['state'];
     $resume = $userData['resume'];
@@ -24,6 +32,7 @@ if (isset($_GET['accept'])) {
     $semail = '';
     // $semail =  $_SESSION['session_email'];
     $updatereview = "UPDATE `user` SET `review` = 'reviewed' WHERE `email` = '$email'";
+
     $updatedreview = mysqli_query($conn, $updatereview);
     $insertAdminQuery = "INSERT INTO `admin` (`username`, `email`, `qualifications`, `state`, `domain`, `id`, `gender`, `website`, `description`) VALUES ('$username', '$email', '$qualifications', '$state', '$domain', '$id',  '$gender', '$website', '$description')";
     $insertResult = mysqli_query($conn, $insertAdminQuery);
@@ -32,7 +41,7 @@ if (isset($_GET['accept'])) {
 }
 
 if (isset($_GET['delete'])) {
-  echo "Hello";
+  // echo "Hello";
   $id = $_GET['delete'];
   $delete = true;
   $sql = "DELETE FROM `user` WHERE `id` = $id";
@@ -231,6 +240,7 @@ if (isset($_GET['delete'])) {
                         $id = $row['id'];
                         $username = $row['username'];
                         $email = $row['email'];
+                        $_SESSION['profile_email_session'] = $email;
                         $description = $row['description'];
                         echo '
                                 <tr>
@@ -247,7 +257,7 @@ if (isset($_GET['delete'])) {
                                 <td>' . $description . '</td>
                                 <td>
                                     <td>
-                                        <a href="../profile/profile.html" class="btn btn-sm btn-primary">View Profile</a>
+                                        <a href="../profile/gil.php?email='.$email.'" class="btn btn-sm btn-primary">View Profile</a>
                                         <a href="?accept=' . $id . '" class="btn btn-sm btn-success">Accept</a>
                                         <a href="?delete=' . $id . '" class="btn btn-sm btn-danger">Delete</a>
                                     </td>

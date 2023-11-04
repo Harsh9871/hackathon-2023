@@ -1,3 +1,22 @@
+<?php
+session_start();
+require '../pages/_init.php';
+$session_email = $_SESSION['session_email'];
+$sql = "SELECT `jobs`.`jtitle` , `jobs`.`description` from `jobs` inner join `applied` ON `jobs`.`jid` = `applied`.`jid` where `email` ='$session_email' ";
+//  // Fetch job data from the database
+$result = mysqli_query($conn, $sql);
+
+//  // Check if there are any rows in the result set
+if (mysqli_num_rows($result) > 0) {
+    // Loop through the rows and display job information
+    while ($row = mysqli_fetch_assoc($result)) {
+        $title = $row['jtitle'];
+        $description = $row['description'];
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,7 +99,7 @@
                         <img src="https://static.vecteezy.com/system/resources/previews/020/765/399/non_2x/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg" class="d-inline-block align-top" alt="">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                        <a class="dropdown-item" href="#">My Tasks</a>
+                        <a class="dropdown-item" href="../profile/profile.php">My Profile</a>
                         <a class="dropdown-item" href="#">Settings</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item text-danger" href="logout.php">Sign out</a>
@@ -133,8 +152,43 @@
                     </div>
 
                     <!-- job -->
+                    <?php
 
-                    <div class="row">
+
+                    if (mysqli_num_rows($result) > 0) {
+                        // Loop through the rows and display job information
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            $jobId = $row['jid'];
+                            $jobTitle = $row['jtitle'];
+                            $jobDescription = $row['description'];
+                            $applied_jid = $row['applied_jid'];
+
+                            // Check if the job is applied
+                            $isApplied = !empty($applied_jid);
+                            echo '<div class="row">
+                                            <div class="col">
+                                                <div class="card mb-grid w-100">
+                                                    <div class="card-body">
+                                                        <div class="d-flex justify-content-between mb-3">
+                                                            <h5 class="card-title mb-0">
+                                                                <font color="blue">' . $jobTitle . '</font>
+                                                            </h5>
+                                                        </div>
+                                                        <p>' . $jobDescription . '</p>
+                                                        <div class="mb-0" data-aos="fade-up" data-aos-delay="300" align="right">
+                                                            <button type="button" class="btn btn-' . ($isApplied ? 'success' : 'primary') . '" ' . ($isApplied ? 'disabled' : '') . '>
+                                                                ' . ($isApplied ? 'Applied' : 'Apply Now') . '
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>';
+                        }
+                    }
+
+                    ?>
+                    <!-- <div class="row">
                         <div class="col">
                             <div class="card mb-grid w-100">
                                 <div class="card-body">
@@ -154,7 +208,54 @@
                             </div>
                         </div>
                     </div>
-                    
+                     -->
+
+                    <?php
+                    //     require '../pages/_init.php';
+
+                    //     if(isset($_SESSION['session_email'])) {
+                    //         $email = $_SESSION['session_email'];
+                    //         // Fetch job data from the database for the logged in user
+                    //         $sql = "SELECT jobs.*, applied.jid AS applied_jid FROM `jobs` LEFT JOIN `applied` ON jobs.jid = applied.jid AND applied.email = '$email'";
+                    //         $result = mysqli_query($conn, $sql);
+
+                    //         // Check if there are any rows in the result set
+                    //         if (mysqli_num_rows($result) > 0) {
+                    //             // Loop through the rows and display job information
+
+                    //             while (true) {
+                    //                 $sql = "SELECT * FROM `jobs` where $_SESSION['session_email']";
+                    //                 $jobId = $row['jid'];
+                    //                 $jobTitle = $row['jtitle'];
+                    //                 $jobDescription = $row['description'];
+                    //                 $applied_jid = $row['applied_jid'];
+
+                    //                 // Check if the job is applied
+                    //                 $isApplied = !empty($applied_jid);
+
+                    //                 // Display job details
+                    //                 echo '<div class="row">
+                    //                         <div class="col">
+                    //                             <div class="card mb-grid w-100">
+                    //                                 <div class="card-body">
+                    //                                     <div class="d-flex justify-content-between mb-3">
+                    //                                         <h5 class="card-title mb-0">
+                    //                                             <font color="blue">' . $jobTitle . '</font>
+                    //                                         </h5>
+                    //                                     </div>
+                    //                                     <p>' . $jobDescription . '</p>
+                    //                                     <div class="mb-0" data-aos="fade-up" data-aos-delay="300" align="right">
+                    //                                         <button type="button" class="btn btn-' . ($isApplied ? 'success' : 'primary') . '" ' . ($isApplied ? 'disabled' : '') . '>
+                    //                                             ' . ($isApplied ? 'Applied' : 'Apply Now') . '
+                    //                                         </button>
+                    //                                     </div>
+                    //                                 </div>
+                    //                             </div>
+                    //                         </div>
+                    //                     </div>';
+                    //             }}}
+                    // 
+                    ?>
                     <!-- job -->
 
 

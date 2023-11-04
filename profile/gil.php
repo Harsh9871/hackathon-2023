@@ -1,3 +1,40 @@
+<?php
+session_start();
+require '../pages/_init.php';
+$profile_email =  $_GET['email'];
+//    $query = "SELECT * FROM user WHERE email = '$profileemail'"; // Change 'users' to your actual table name
+// $result = mysqli_query($conn, $query);
+// <------------------------------------------------------------------>
+// $profile_email = $_SESSION['session_email'];
+
+// Prepare and execute a query to retrieve user data
+$query = "SELECT * FROM user WHERE email = '" . $profile_email . "'"; // Change 'users' to your actual table name
+$result = mysqli_query($conn, $query);
+// Check if the query was successful
+if (!$result) {
+  die("Query failed: " . mysqli_error($conn));
+}
+
+// Fetch user data
+if (mysqli_num_rows($result) > 0) {
+  $userData = mysqli_fetch_assoc($result);
+  // Access user data using $userData['column_name']
+} else {
+  // Handle the case where no user with the specified email was found
+}
+// <---------------------------------------------------------->
+// Check if the query was successful
+if (!$result) {
+  die("Query failed: " . mysqli_error($conn));
+}
+
+// Fetch user data
+// if (mysqli_num_rows($result) > 0) {
+//   $userData = mysqli_fetch_assoc($result);
+//   // Access user data using $userData['column_name']
+// }
+
+?>
 <html>
 
 <head>
@@ -17,8 +54,7 @@
       </div>
     </nav>
     <!-- Header -->
-    <div
-      style="min-height: 600px; background-image: url(https://www.simplilearn.com/ice9/free_resources_article_thumb/friend_class_in_cpp.jpg); background-size: cover; background-position: center top;">
+    <div style="min-height: 600px; background-image: url(https://www.simplilearn.com/ice9/free_resources_article_thumb/friend_class_in_cpp.jpg); background-size: cover; background-position: center top;">
       <!-- Mask -->
       <span class="mask bg-gradient-default opacity-8"></span>
       <!-- Header container -->
@@ -34,8 +70,7 @@
                 <div class="col-lg-3 order-lg-2">
                   <div class="card-profile-image">
                     <a href="#">
-                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVEuMlrmqT6UmxF0qgT3gmx48r3RTiLKPkz5olxld2JF9ZeSiPJCUa22-jjpiFNdLDn6o&usqp=CAU"
-                        class="rounded-circle">
+                      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVEuMlrmqT6UmxF0qgT3gmx48r3RTiLKPkz5olxld2JF9ZeSiPJCUa22-jjpiFNdLDn6o&usqp=CAU" class="rounded-circle">
                     </a>
                   </div>
                 </div>
@@ -50,7 +85,7 @@
                 <div class="row">
                   <div class="col">
                     <div class="card-profile-stats d-flex justify-content-center mt-md-5">
-                      
+
                     </div>
                   </div>
                 </div>
@@ -73,39 +108,34 @@
                     <div class="col-lg-6">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-username">Username</label>
-                        <input type="text" id="input-username" class="form-control form-control-alternative"
-                          placeholder="Username" value="lucky.jesse" disabled>
+                        <input type="text" id="input-username" class="form-control form-control-alternative" placeholder="Username" value="<?php echo $userData['username']; ?>" disabled>
                       </div>
                     </div>
                     <div class="col-lg-6">
                       <div class="form-group">
                         <label class="form-control-label" for="input-email">Email address</label>
-                        <input type="email" id="input-email" class="form-control form-control-alternative"
-                          placeholder="jesse@example.com" disabled>
+                        <input type="email" id="input-email" class="form-control form-control-alternative" value="<?php echo $userData['email']; ?>" disabled>
                       </div>
                     </div>
                   </div>
-                  
+
                   <div class="row">
                     <div class="col-lg-4">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-city">State</label>
-                        <input type="text" id="input-state" class="form-control form-control-alternative"
-                          placeholder="City" value="New York" disabled>
+                        <input type="text" id="input-state" class="form-control form-control-alternative" placeholder="City" value="<?php echo $userData['state']; ?>" disabled>
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-country">Gender</label>
-                        <input type="text" id="input-Gender" class="form-control form-control-alternative"
-                          placeholder="Country" value="United States" disabled>
+                        <input type="text" id="input-Gender" class="form-control form-control-alternative" placeholder="Country" value="<?php echo $userData['gender']; ?>" disabled>
                       </div>
                     </div>
                     <div class="col-lg-4">
                       <div class="form-group">
                         <label class="form-control-label" for="input-country">Qualification</label>
-                        <input type="number" id="input-qualification" class="form-control form-control-alternative"
-                          placeholder="Postal code" disabled>
+                        <input type="text" id="input-qualification" class="form-control form-control-alternative" value="<?php echo $userData['qualifications']; ?>" disabled>
                       </div>
                     </div>
                   </div>
@@ -113,36 +143,33 @@
                     <div class="col-lg-6">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-username">Linkdin Profile URL</label>
-                        <input type="text" id="input-username" class="form-control form-control-alternative"
-                          placeholder="URL"  disabled>
+                        <input type="text" id="input-username" class="form-control form-control-alternative" value="<?php echo $userData['website']; ?>" disabled>
                       </div>
                     </div>
                     <div class="col-lg-6">
                       <div class="form-group">
                         <label class="form-control-label" for="input-email">Domain</label>
-                        <input type="email" id="input-email" class="form-control form-control-alternative"
-                          placeholder="Networking" disabled>
+                        <input type="email" id="input-email" class="form-control form-control-alternative" value="<?php echo $userData['domain']; ?>" disabled>
                       </div>
                     </div>
                     <div class="pl-lg-4">
                       <div class="form-group focused">
                         <label class="form-control-label" for="input-email">About Me</label>
-                        <textarea rows="4" class="form-control form-control-alternative"
-                          placeholder="A few words about you ..." style="height: 100px; width: 1725px; resize: none;" disabled>A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
+                        <textarea rows="4" class="form-control form-control-alternative" value="" style="height: 100px; width: 1090px; resize: none;" disabled><?php echo $userData['description']; ?></textarea>
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
-          </div><br>
-        </div>
+          </div>
+        </div><br>
       </div>
     </div>
-    <div class="container-fluid d-flex align-items-center">
-      <h6><br><br><br></h6>
-    </div>
+  </div>
+  <div class="container-fluid d-flex align-items-center">
+    <h6><br><br><br></h6>
+  </div>
   </div>
 
 </body>

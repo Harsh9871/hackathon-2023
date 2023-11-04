@@ -1,18 +1,19 @@
-<?php
-// jtitle jdescription submit
-    session_start();
-    require './_init.php';
-    session_start();
-    if (isset($_POST['addjob'])){
-        $jobtitle = $_POST['jtitle'];
-        $jobdescription = $_POST['jdescription'];
-        $sql = "INSERT INTO `jobs` ( `jtitle`, `description`) VALUES ('$jobtitle', '$jobdescription')";
-        $result = mysqli_query($conn , $sql);
-        header("Location: ./dash_index.html");
-        exit();
+<!-- <?php
+        // jtitle jdescription submit
+        // session_start();
+        // require './_init.php';
+        // session_start();
+        // if (isset($_POST['addjob'])){
+        //     $jobtitle = $_POST['jtitle'];
+        //     $jobdescription = $_POST['jdescription'];
+        //     $sql = "INSERT INTO `jobs` ( `jtitle`, `description`) VALUES ('$jobtitle', '$jobdescription')";
+        //     $result = mysqli_query($conn , $sql);
+        //     header("Location: ./dash_index.html");
+        //     exit();
 
-    }
-?>
+        // }
+
+        ?> -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -161,7 +162,7 @@
                             C
                         </span>
                         <span class="sidebar-nav-name">
-                            Create A Job
+                            Create a job
                         </span>
                     </a>
                 </li>
@@ -184,7 +185,7 @@
                                         <div class="row justify-content-center ">
                                             <div class="col-lg-6 text-center ">
                                                 <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">
-                                                    <font color="blue">Create a Job </font>
+                                                    <font color="blue">CREATE A JOB</font>
                                                 </h1>
 
                                             </div>
@@ -207,15 +208,31 @@
                                             <div class="row">
                                                 <div class="col-12 mt-3">
                                                 </div>
-                                                </div>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <input type="text" class="form-control" placeholder="Job Title" name="jtitle" maxlength="500" required>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <input type="text" class="form-control" placeholder="Expected Salary" name="jtitle" maxlength="500" required>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <input type="text" class="form-control" placeholder="Profile Skills" name="jtitle" maxlength="500" required>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <input type="text" class="form-control" placeholder="Mode of Job" name="jtitle" maxlength="500" required>
+                                            </div>
+                                            <div class="col-12 mb-3">
+                                                <input type="text" class="form-control" placeholder="Working Time" name="jtitle" maxlength="500" required>
+                                            </div>
                                                 <div class="col-12 mb-3">
-                                                    <input type="text" class="form-control" placeholder="Job Title" name="jtitle" maxlength="500" required>
+                                                    <h6>Contract</h6>
+                                                    <input type="file" accept="image/*" capture="camera" class="form-control" placeholder="Upload your image here" name="profilePhoto" required>
                                                 </div>
                                                 <div class="col-12 mb-3">
                                                     <textarea name="jdescription" class="form-control" id="" placeholder="Describe Job here" cols="30" rows="5" style="resize: none;"></textarea>
                                                     <!-- <input type="textarea" class="form-control" placeholder="Job Description" name="jdescription" maxlength="5000" required> -->
                                                 </div>
-                                                
+
                                                 <div class="col-12">
                                                     <p class="mb-0" data-aos="fade-up" data-aos-delay="300"><button type="submit" class="btn btn-primary" name="addjob">
                                                             Create </button></p>

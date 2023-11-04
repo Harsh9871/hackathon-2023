@@ -59,31 +59,30 @@ session_start();
 require('./_init.php');
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
-    $FullName = $_POST['FullName'];
-    $eMail = $_POST['eMail'];
-    $passWord = $_POST['passWord'];
-    $rePassword = $_POST['rePassword'];
+  $FullName = $_POST['FullName'];
+  $eMail = $_POST['eMail'];
+  $passWord = $_POST['passWord'];
+  $rePassword = $_POST['rePassword'];
 
-    $emailExists = emailAlreadyExists($eMail, $conn);
+  $emailExists = emailAlreadyExists($eMail, $conn);
 
-    if (!$emailExists) {
-        $hashedPassword = PasswordMatchAndHash($passWord, $rePassword);
-        $sql = "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$FullName', '$eMail','$hashedPassword')";
-        $result = mysqli_query($conn, $sql);
+  if (!$emailExists) {
+    $hashedPassword = PasswordMatchAndHash($passWord, $rePassword);
+    $sql = "INSERT INTO `user` (`username`, `email`, `password`) VALUES ('$FullName', '$eMail','$hashedPassword')";
+    $result = mysqli_query($conn, $sql);
 
-        if ($result) {
-             $_SESSION['session_email']= $eMail;
-            header("Location: ./creation.php");
-            // exit();
-        } else {
-            header("Location: ./register.php");
-            // exit();
-        }
+    if ($result) {
+      $_SESSION['session_email'] = $eMail;
+      header("Location: ./creation.php");
+      // exit();
     } else {
-        header("Location: ./register.php");
-        // exit();
+      header("Location: ./creation.php");
+      // exit();
     }
-    
+  } else {
+    header("Location: ./register.php");
+    // exit();
+  }
 }
 ?>
 <!doctype html>
@@ -188,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             <div class="col-lg-6 text-center ">
               <h1 class="mb-4 heading text-white" data-aos="fade-up" data-aos-delay="100">Register</h1>
 
-            </div>
+              </div>
           </div>
         </div>
       </div> <!-- /.row -->
@@ -215,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <input type="text" class="form-control" placeholder="Full name" name="FullName" required>
               </div>
               <div class="col-12 mb-3">
-                <input type="text" class="form-control" placeholder="Email" name="eMail" required>
+                <input type="email" class="form-control" placeholder="Email" name="eMail" required>
               </div>
               <div class="col-12 mb-3">
                 <input type="password" class="form-control" placeholder="Password" name="passWord" required minlength="8">
@@ -234,7 +233,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
               </div>
               <div class="col-12">
                 <p class="mb-0" data-aos="fade-up" data-aos-delay="300"><button type="submit" class="btn btn-secondary" name="submit">Register</button></p>
-
               </div>
             </div>
           </form>

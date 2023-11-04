@@ -13,11 +13,10 @@
         $result = mysqli_query($conn, $sql);
 
         if ($result) {
-            // echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-            //     <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-            //     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            // </div>';
-            echo '<script> alert("Data Submitted") </script>';
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>Holy guacamole!</strong> You should check in on some of those fields below.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>';
             header('Location: ./landing.php');
         } else {
             // Error occurred while inserting data
@@ -191,8 +190,7 @@
                             </span>
                         </a>
                     </li>
-                    
-                    
+
                 </ul>
                 </li>
                 </ul>
@@ -204,7 +202,7 @@
                         <div class="container-fluid">
                             <div class="pb-3">
                                 <h1 align="center">
-                                    <font color="blue">Available jobs</font>
+                                    <font color="blue">Available Jobs</font>
                                 </h1>
                             </div>
 
@@ -236,8 +234,14 @@
                                                         </h5>
                                                     </div>
                                                     <p align="left"><?php echo $jobDescription; ?></p>
-                                                    <div class="mb-0" data-aos="fade-up" data-aos-delay="300" align="right">
+                                                    <!-- <div class="mb-0" data-aos="fade-up" data-aos-delay="300" align="right">
                                                         <form method="post">
+                                                            <input type="hidden" name="jid" value="<?php echo $jobId; ?>">
+                                                            <button type="submit" class="btn btn-primary" name="apply_job">Apply Now</button>
+                                                        </form>
+                                                    </div> -->
+                                                    <div class="mb-0" data-aos="fade-up" data-aos-delay="300" align="right">
+                                                        <form method="post" class="apply-form">
                                                             <input type="hidden" name="jid" value="<?php echo $jobId; ?>">
                                                             <button type="submit" class="btn btn-primary" name="apply_job">Apply Now</button>
                                                         </form>
@@ -261,7 +265,21 @@
 
 
             <!-- job -->
+            <script>
+                // Get all elements with class "apply-form"
+                const applyForms = document.querySelectorAll('.apply-form');
 
+                // Add event listener to each form
+                applyForms.forEach(form => {
+                    form.addEventListener('submit', function(event) {
+                        // Prevent the form from submitting and refreshing the page
+                        event.preventDefault();
+
+                        // Show an alert when the form is submitted
+                        alert('You have applied to the job!');
+                    });
+                });
+            </script>
             <!-- If you prefer jQuery these are the required scripts -->
             <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js"></script>

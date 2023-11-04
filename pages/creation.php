@@ -16,31 +16,28 @@ if (isset($_POST['create'])) {
     if (isset($_POST['resume'])) {
 
         $folder_path = './userData/cvResume';
-     
+
         $filename = basename($_FILES['resume']['name']);
-        $newname = $folder_path .$_SESSION['session_email']. $filename;
+        $newname = $folder_path . $_SESSION['session_email'] . $filename;
         move_uploaded_file($_FILES['resume']['name'], $newname);
-        
-       }
-     
-     }
-
-    // Check if a profile photo was uploaded
-    if (isset($_FILES['profilePhoto'])) {
-        $file_tempname = $_FILES['profilePhoto']['tmp_name'];
-        $file_extension = pathinfo($_FILES['profilePhoto']['name'], PATHINFO_EXTENSION);
-        $trimmedEmail = strstr($semail, '@', true);
-        $finalFileName = $trimmedEmail . "_.jpg";
-        $profilePhotoPath = "../userData/profilePhoto/";
-        // Move the uploaded profile photo to the destination directory
-        move_uploaded_file($file_tempname,  $profilePhotoPath  . $finalFileName);
-        $semail = '';
-
-        $semail = $_SESSION['session_email'];
-
-        // echo $semail;
-        // Insert data into the database
     }
+}
+
+// Check if a profile photo was uploaded
+if (isset($_FILES['profilePhoto'])) {
+    $file_tempname = $_FILES['profilePhoto']['tmp_name'];
+    $file_extension = pathinfo($_FILES['profilePhoto']['name'], PATHINFO_EXTENSION);
+    $trimmedEmail = strstr($semail, '@', true);
+    $finalFileName = $trimmedEmail . "_.jpg";
+    $profilePhotoPath = "../userData/profilePhoto/";
+    // Move the uploaded profile photo to the destination directory
+    move_uploaded_file($file_tempname,  $profilePhotoPath  . $finalFileName);
+    $semail = '';
+
+    $semail = $_SESSION['session_email'];
+
+    // echo $semail;
+    // Insert data into the database
     $sql = "UPDATE `user` SET 
     `qualifications` = '$Qualifications', 
     `state` = '$State', 
@@ -51,22 +48,22 @@ if (isset($_POST['create'])) {
     `review` = 'unreviewed'
     WHERE `email` = '$semail'";
 
-        $result = mysqli_query($conn, $sql);
-        if ($result) {
-            header("Location: landing.php");
-            exit();
-            // echo "echo hello by harsh";
-        }
+    $result = mysqli_query($conn, $sql);
+    if ($result) {
+        header("Location: landing.php");
+        // exit();
+        // echo "echo hello by harsh";
+    }
 
-        if ($result) {
-            // Data insertion successful, redirect to landing page
-            // header("Location: ./landing.php");
-            exit();
-        } else {
-            // Handle database insertion failure
-            // echo "Error: " . mysqli_error($conn);
-        }
-    
+    if ($result) {
+        // Data insertion successful, redirect to landing page
+        // header("Location: ./landing.php");
+        exit();
+    } else {
+        // Handle database insertion failure
+        // echo "Error: " . mysqli_error($conn);
+    }
+}
 
 ?>
 <!doctype html>
@@ -190,13 +187,23 @@ if (isset($_POST['create'])) {
                     <!--  -->
                     <!-- form input -->
                     <!--  -->
-                    <form class="form-box" method="post" enctype="multipart/form-data">
+                    <form class="form-box" method="post" enctype="multipart/form-data" id="creation_form">
                         <div class="col-12 mb-3" style="height: 12px;">
 
                         </div>
                         <div class="row">
-                        <div class="col-12 mb-3">
-                                <h6>Please Upload your Profile here</h6>
+                            <div class="col-12 mb-3">
+                                <h6>Please Upload your Profile Picture here</h6>
+                                <input type="file" accept="image/*" capture="camera" class="form-control" placeholder="Upload your image here" name="profilePhoto" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <h6>Please Upload your Project Pictures here</h6>
+                                <input type="file" accept="image/*" capture="camera" class="form-control" placeholder="Upload your image here" name="profilePhoto" required>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <input type="file" accept="image/*" capture="camera" class="form-control" placeholder="Upload your image here" name="profilePhoto" required>
+                            </div>
+                            <div class="col-12 mb-3">
                                 <input type="file" accept="image/*" capture="camera" class="form-control" placeholder="Upload your image here" name="profilePhoto" required>
                             </div>
                             <div class="col-12 mb-3">
@@ -211,7 +218,7 @@ if (isset($_POST['create'])) {
                             </div>
                             <div class="col-12 mb-3">
                                 <label for="resume">Enter your CV/Resume</label>
-                                <input type="file" accept="application/pdf" class="form-control" placeholder="Enter Your CV/Resume" name="resume" required>
+                                <input type="file" accept="application/pdf" class="form-control" placeholder="Enter Your CV/Resume" name="resume" id="resume" required>
                             </div>
                             <div class="col-12 mb-3">
                                 <select name="gender" id="select" class="custom-select" required>
@@ -223,12 +230,12 @@ if (isset($_POST['create'])) {
 
                             </div>
                             <div class="col-12 mb-3">
-                                <input type="url" class="form-control" placeholder="Enter Your Linkdin URL" name="url" required>
+                                <input type="url" class="form-control" placeholder="Enter Your URL" name="url" required>
                             </div>
                             <div class="col-12 mb-3">
                                 <textarea name="tellUsAboutYouSelf" class="form-control" id="message" cols="50" rows="5" name="tellUsAboutYouSelf" placeholder="Tell us about yourself" style="resize: none;" required></textarea>
                             </div>
-                            <button type="submit" class="btn btn-secondary" name="create">Create</button>
+                            <button type="submit" class="btn btn-secondary" name="create" onclick="validateFile()">Create</button>
 
                     </form>
                 </div>
@@ -326,5 +333,20 @@ if (isset($_POST['create'])) {
     <script src="../assets/js/custom.js"></script>
 
 </body>
+<script>
+    function validateFile() {
+        var fileInput = document.getElementById('resume');
+        var filePath = fileInput.value;
+        var allowedExtensions = /(\.pdf)$/i;
 
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type. Please upload a valid Pdf file.');
+            fileInput.value = '';
+            return false;
+        } else {
+            // File extension is valid, you can proceed with form submission or other actions
+            document.getElementById('creation_form').submit();
+        }
+    }
+</script>
 </html>

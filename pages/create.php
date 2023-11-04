@@ -146,7 +146,7 @@
               C
             </span>
             <span class="sidebar-nav-name">
-              Create A Job
+              create job
             </span>
           </a>
         </li>

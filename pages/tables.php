@@ -184,9 +184,7 @@
                 <th scope="col">Email</th>
                 <th scope="col">Qualifications</th>
                 <th scope="col">State</th>
-                <th scope="col">Resume</th>
                 <th scope="col">Domain</th>
-                <th scope="col">Age</th>
                 <th scope="col">Gender</th>
                 <th scope="col">Website</th>
                 <th scope="col">Description</th>
